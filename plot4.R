@@ -1,0 +1,28 @@
+library(dplyr)
+library(lubridate)
+
+setwd("C:/Users/jeff.jenkins/Dropbox/R/coursera/ExploratoryDataAnalysis")
+
+data <- read.csv("household_power_consumption.txt", sep = ";", na.strings = "?")
+
+data2 <- filter(data, Date == "1/2/2007" | Date == "2/2/2007")
+
+##data2$Date <- as.Date(data2$Date, "%d/%m/%Y") ## converts date from factor to Date format
+
+
+
+##data2[,10] <- 
+
+dt <- paste(data2[,1], data2[,2])
+
+dt <- strptime(dt,"%d/%m/%Y %H:%M:%S")  ## converts chars to date/time
+
+png(file = "plot4.png", width = 480, height = 480) 
+par(mfrow=c(2,2)) # all plots on one page
+plot(dt, data2[,3], type ="l", ylab = "Global Active Power", xlab = "")
+with(data2, plot(data2$Voltage, ylab="Voltage", xlab ="datetime", type ="l", col = "green" ))
+with(data2, plot(dt, data2$Sub_metering_1, type ="l",  ylab = "Energy Sub metering", xlab = ""))
+with(data2, points(dt, data2$Sub_metering_2, type ="l",  ylab = "Global Active Power (kilowatts)", xlab = "", col = "red"))
+with(data2, points(dt, data2$Sub_metering_3, type ="l",  ylab = "Global Active Power (kilowatts)", xlab = "", col = "blue"))
+with(data2, plot(dt, data2[,4], type ="l", ylab="Global_Reactive_Power", xlab="datetime"))
+dev.off()
